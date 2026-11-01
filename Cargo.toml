@@ -1,0 +1,88 @@
+[package]
+name = "fusiondb"
+version = "0.2.0"
+edition = "2021"
+description = "Embedded database powered by DataFusion and RocksDB with Arrow IPC storage"
+license = "MIT"
+readme = "README.md"
+keywords = ["database", "embedded", "rocksdb", "datafusion", "arrow"]
+
+[lib]
+name = "fusiondb"
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[[bin]]
+name = "fusiondb"
+path = "src/main.rs"
+
+[dependencies]
+# Apache DataFusion - Query Engine
+datafusion = { version = "48", default-features = false, features = ["compression"] }
+
+# Apache Arrow - Data Format
+# DataFusion 48 uses arrow 55.x — we align the versions.
+arrow = { version = "55", default-features = false, features = ["ipc"] }
+arrow-array = "55"
+arrow-schema = "55"
+arrow-ipc = "55"
+
+# RocksDB - Storage Engine
+rocksdb = { version = "0.22", default-features = false, features = ["multi-threaded-cf"] }
+
+# Async Runtime (DataFusion requires tokio)
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+
+# Serialization (for metadata)
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Error handling
+thiserror = "1"
+
+# Async Trait (required for DataFusion TableProvider)
+async-trait = "0.1"
+
+# Stream utilities
+futures = "0.3"
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
+
+# --- CLI Dependencies ---
+# Command-line argument parsing
+clap = { version = "4", features = ["derive"] }
+
+# Interactive REPL with history and line editing
+rustyline = "15"
+
+# Colored terminal output
+colored = "3"
+
+# Pretty table formatting for query results
+comfy-table = "7"
+
+# CSV import/export
+csv = "1.3"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "test-util"] }
+tempfile = "3"
+criterion = "0.5"
+rand = "0.8"
+dhat = "0.3.3"
+
+[[bench]]
+name = "rocksdb_bench"
+harness = false
+
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"    # Reduces binary size by removing stack unwinding code
+strip = true       # Strips all debug symbols and metadata (extremely effective on Windows)
