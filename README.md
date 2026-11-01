@@ -1,4 +1,4 @@
-# FusionDB
+# FusionDB ☄️
 
 [![Rust](https://img.shields.io/badge/rust-2021-orange)](https://www.rust-lang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -6,6 +6,10 @@
 An embedded, serverless database engine written in Rust. FusionDB integrates **Apache DataFusion** as its SQL query engine, **RocksDB** as its persistent storage engine, and **Apache Arrow IPC** as its binary serialization format. 
 
 It is designed for applications that require the analytical power of Apache Arrow and DataFusion, combined with the point-lookup efficiency and durability of RocksDB, all embedded directly into a Rust application without running a separate database server.
+
+> [!CAUTION]
+> fusiondb is definitely not designed for production use; it was created for learning purposes. It is recommended that you use a different database instead!
+> Please do not open pull requests or issues, as the project is not under active development—though you may submit a pull request if you discover a serious bug.
 
 ---
 
